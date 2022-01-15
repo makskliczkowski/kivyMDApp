@@ -1,0 +1,190 @@
+#: import environ os.environ
+#: import gch kivy.utils.get_color_from_hex
+#: import grc kivy.utils.get_random_color
+#: import StiffScrollEffect kivymd.effects.stiffscroll.StiffScrollEffect
+#: import MyNavigationItem libs.baseclass.tabnavigation.MyNavigationItem
+#: import MyNavigationBar libs.baseclass.tabnavigation.MyNavigationBar
+#: import MyOverviewScreen libs.baseclass.overview_screen.MyOverviewScreen
+#: import MyAccountsScreen libs.baseclass.accounts_screen.MyAccountsScreen
+#: import FoodScreen libs.baseclass.food_screen.FoodScreen
+#: import StuffScreen libs.baseclass.stuff_screen.StuffScreen
+#: import MyBudgetsScreen libs.baseclass.budgets_screen.MyBudgetsScreen
+
+
+<MyRootScreen>
+    md_bg_color: gch("#0E1259")
+
+    MDBoxLayout:
+        orientation: 'vertical'
+	
+        MyNavigationBar:
+            id: nav_bar
+
+            MyNavigationItem:
+                text: "OVERVIEW"
+                icon: "chart-pie"
+                on_release:
+                    scr_manager.transition.direction = "right"
+                    scr_manager.current = "OVERVIEW"
+
+            MyNavigationItem:
+                text: "ACCOUNTS"
+                icon: "currency-usd"
+                on_release:
+                    scr_manager.transition.direction = "right" \
+                    if scr_manager.current in ["FOOD", "BUDGETS"] \
+                    else "left"
+                    scr_manager.current = "ACCOUNTS"
+
+            MyNavigationItem:
+                text: "BUDGETS"
+                icon: "shopping"
+                on_release:
+                    scr_manager.transition.direction = "left" \
+                    if scr_manager.current in ["OVERVIEW", "ACCOUNTS"] \
+                    else "right"
+                    scr_manager.current = "BUDGETS"
+
+            MyNavigationItem:
+                text: "TRANSPORT"
+                icon: "bus"
+                on_release:
+                    scr_manager.transition.direction = "left" \
+                    if scr_manager.current in ["OVERVIEW", "ACCOUNTS","BUDGETS"] \
+                    else "right"
+                    scr_manager.current = "TRANSPORT"
+            
+            MyNavigationItem:
+                text: "HEALTH"
+                icon: "hospital"
+                on_release:
+                    scr_manager.transition.direction = "left" \
+                    if scr_manager.current in ["OVERVIEW", "ACCOUNTS","BUDGETS","TRANSPORT"] \
+                    else "right"
+                    scr_manager.current = "HEALTH"
+
+            MyNavigationItem:
+                text: "STUFF"
+                icon: "tie"
+                on_release:
+                    scr_manager.transition.direction = "left" \
+                    if scr_manager.current in ["OVERVIEW", "ACCOUNTS","BUDGETS","TRANSPORT", "HEALTH"] \
+                    else "right"
+                    scr_manager.current = "STUFF"
+            
+            MyNavigationItem:
+                text: "FOOD"
+                icon: "pizza"
+                on_release:
+                    scr_manager.transition.direction = "left"
+                    scr_manager.current = "FOOD"
+
+        ScreenManager:
+            id: scr_manager
+			canvas.before:
+				Color:
+					rgba: gch("#FFFFFF")
+				Rectangle:
+					pos:self.pos 
+					size:self.size
+            MyOverviewScreen:
+                name: "OVERVIEW"
+
+            MyAccountsScreen:
+                name: "ACCOUNTS"
+
+            MyBudgetsScreen:
+                name: "BUDGETS"
+            
+            TransportScreen:
+                name: "TRANSPORT"
+
+            HealthScreen:
+                name: "HEALTH"
+            
+            StuffScreen:
+                name: "STUFF"
+
+            FoodScreen:
+                name: "FOOD"
+
+
+<ScrollView>
+    bar_width: 0
+    effect_cls: StiffScrollEffect
+
+
+<MyLabel@MDLabel>
+    adaptive_height: True
+    color: gch("#2E83F2")
+    
+<MyListItem>
+    size_hint_y: None
+    height: dp(60)
+    canvas:
+        Color:
+			rgba: gch("#FFFFFF")
+        Line:
+            points: (root.x+dp(16), root.y, root.x+self.width-dp(16)-0, root.y)
+
+    MDBoxLayout:
+        adaptive_size: True
+        padding: dp(15)
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDIcon:
+            icon: "minus-thick"
+            halign: "center"
+            pos_hint: {"center_y": .5}
+            theme_text_color: "Custom"
+            color : grc(1.0)
+
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: 90
+                    origin: self.center
+            canvas.after:
+                PopMatrix
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        adaptive_height: True
+        pos_hint: {"center_x": .5, "center_y": .5}
+        spacing: dp(2)
+
+        MyLabel:
+            text: root.text
+            font_style: "Subtitle1"
+            color: gch("#0E1259")
+
+        MyLabel:
+            text: root.secondary_text
+            theme_text_color: "Hint"
+            font_style: "Button"
+            color: gch("#4B94F2")
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: (0, 0, 0, dp(10))
+        adaptive_height: True
+
+        MyLabel:
+            text: root.tertiary_text
+            theme_text_color: "Secondary"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            halign: "right"
+            font_style: "H3"
+            font_size: sp(20)
+            color: gch("#2E83F2")
+
+    MDBoxLayout:
+        adaptive_size: True
+        padding: dp(15)
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDIcon:
+            icon: "chevron-right"
+            halign: "center"
+            pos_hint: {"center_y": .5}
+            theme_text_color: "Hint"

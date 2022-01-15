@@ -1,0 +1,39 @@
+#: import grc kivy.utils.get_random_color
+<MyNavigationItem>
+    size_hint: None, None
+    size: (dp(50), dp(50))
+    pos_hint: {"center_x": .1, "center_y": .5}
+
+    MDIcon:
+        id: _icon
+        icon: root.icon
+        halign: "center"
+        valign: "center"
+        size_hint: (None, None)
+        pos_hint: {"center_x": .05, "center_y": .5}
+        size: (root.height, root.height)
+        theme_text_color: "Custom"
+        color: grc()
+
+    FloatLayout:
+        size_hint_x: None
+        width: root.width - _icon.width
+
+        MDLabel:
+            id: _label
+            text: root.text
+            opacity: 0
+            halign: "center"
+            bold: True
+            font_style: "Button"
+            adaptive_size: True
+            pos_hint: {"center_x": .35, "center_y": .5}
+
+
+<MyNavigationBar>:
+    size_hint: (None, None)
+    height: dp(75)
+
+    BoxLayout:
+        id: _button_box
+        

@@ -1,0 +1,188 @@
+#: import gch kivy.utils.get_color_from_hex
+#: import randColor libs.common.randColor
+
+<MyOverviewScreen>
+
+
+    FloatLayout:
+
+        ScrollView:
+
+            MDList:
+                spacing: dp(5)
+
+                AlertBox:
+                    
+
+                MyOverviewBox:
+                    title: "Accounts"
+                    money: "$ 12,134.49"
+                    text: ["Current", "Home savings", "Car savings"]
+                    secondary_text: ["••••••1234", "••••••5678", "••••••9012"]
+                    tertiary_text: ["$ 2,215.13", "$ 8,678.88", "$ 987.48"]
+                    bar_color: [gch("#1EB980"), gch("#1EB980"), gch("#1EB580")]
+
+                MyOverviewBox:
+                    title: "Budgets"
+                    money: "$ 480.00"
+                    text: ["Coffee shops", "Groceries", "Restaurants"]
+                    secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
+                    tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
+                    bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
+
+                MyOverviewBox:
+                    title: "Transport"
+                    money: "$ 480.00"
+                    text: ["Coffee shops", "Groceries", "Restaurants"]
+                    secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
+                    tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
+                    bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
+
+                MyOverviewBox:
+                    title: "Health"
+                    money: "$ 480.00"
+                    text: ["Coffee shops", "Groceries", "Restaurants"]
+                    secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
+                    tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
+                    bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
+                    
+                MyOverviewBox:
+                    title: "Stuff"
+                    money: "$ 480.00"
+                    text: ["Coffee shops", "Groceries", "Restaurants"]
+                    secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
+                    tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
+                    bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
+
+                MyOverviewBox:
+                    title: "Food"
+                    money: "$ 1,732.69"
+                    text: ["RedPay Credit", "Rent", "TabFine Credit"]
+                    secondary_text: ["29 Jan", "9 Feb", "22 Feb"]
+                    tertiary_text: ["$ 45.36", "$ 1,200.00", "$ 87.33"]
+                    bar_color: [gch("#FFCF44"), gch("#FF6859"), gch("#F8BBD0")]
+                    
+        MyFloatingButton:
+            data:app.data
+
+            
+
+<MyOverviewBox>
+    adaptive_height: True
+    orientation: 'vertical'
+
+    canvas.before:
+        Color:
+            rgba: gch("#2E83F2")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    MDBoxLayout:
+        padding: dp(10)
+        orientation: 'vertical'
+        adaptive_height: True
+
+        MyLabel:
+            text: root.title
+            font_style: "Caption"
+            font_size:dp(35)
+            color: gch("#FFFFFF")
+
+        MyLabel:
+            text: root.money
+            font_style: "Overline"
+            font_size:dp(25)
+            color: gch("#FFFFFF")
+
+    MyList:
+        MyListItem:
+            text: root.text[0]
+            secondary_text: root.secondary_text[0]
+            tertiary_text: root.tertiary_text[0]
+            bar_color: root.bar_color[0]
+
+        MyListItem:
+            text: root.text[1]
+            secondary_text: root.secondary_text[1]
+            tertiary_text: root.tertiary_text[1]
+            bar_color: root.bar_color[1]
+
+        MyListItem:
+            text: root.text[2]
+            secondary_text: root.secondary_text[2]
+            tertiary_text: root.tertiary_text[2]
+            bar_color: root.bar_color[2]
+    MDBoxLayout:
+        padding: dp(20)
+        orientation: 'vertical'
+        adaptive_height: True
+        canvas.before:
+            Color:
+                rgba: gch("#FFFFFF")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        MySeeAllButton:
+            padding: dp(10)
+            adaptive_height: True
+
+            MyLabel:
+                text: "SEE ALL"
+                halign: "center"
+                font_style: "Button"
+
+
+<AlertBox@MDBoxLayout>
+    adaptive_height: True
+    padding: dp(10)
+	padding_x: self.width/2
+    canvas.before:
+        Color:
+            rgba: gch("#F2CB05")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    MyLabel:
+        text: "Alert!\nBeware: you've used up 90% of your shopping budget for this month."
+        font_style: "Button"
+		valign:'center'
+        halign: "center"
+        center: root.center
+        color: gch("#0E1259")
+
+
+<MyList@MDList>
+	canvas.before:
+        Color:
+            rgba: gch("#FFFFFF")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<MySeeAllButton>
+	padding_x: self.width/2
+	canvas.before:
+        Color:
+            rgba: gch("#FFFFFF")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    md_bg_color: gch("#F2CB05")
+    text_color: gch("#0E1259")
+    font_style : "Button"
+    color: gch("#0E1259")
+	pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<MyFloatingButton>
+    icon: "plus"
+
+    color: gch("#F2CB05")
+
+    opposite_colors: True
+    root_button_anim: True
+    rotation_root_button: True
+    #hint_animation: True
+    right_pad:True
+    callback: app.callback

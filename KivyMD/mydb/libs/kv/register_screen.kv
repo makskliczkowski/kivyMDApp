@@ -1,0 +1,62 @@
+#: import environ os.environ
+#: import gch kivy.utils.get_color_from_hex
+
+
+<MyRegisterScreen>
+    canvas:
+        Color:
+            rgba: gch("#2E83F2")
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    MDBoxLayout:
+        adaptive_height: True
+        orientation: "vertical"
+        spacing: dp(80)
+        padding: dp(30)
+        pos_hint: {"center_x": .5}
+
+        Image:
+            source: f"{environ['MYDB_ROOT']}/assets/images/logo.png"
+            pos_hint: {"center_x": .5}
+            size_hint: None, None
+
+        MDBoxLayout:
+            adaptive_height: True
+            orientation: "vertical"
+            spacing: dp(25)
+			
+            MDTextField:
+				id:username
+                hint_text: "Username"
+				color_active:app.theme_cls.primary_light
+            MDTextField:
+				id:pw
+                hint_text: "Password"
+				color_active:app.theme_cls.primary_light
+                password: True
+                password_mask: "•"
+
+        MDBoxLayout:
+            adaptive_height: True
+            orientation: "vertical"
+            spacing: dp(20)
+
+            MDIconButton:
+                icon: 'fingerprint'
+                pos_hint: {"center_x": .5}
+                user_font_size: dp(62)
+                _no_ripple_effect: True
+                on_release: root.parent.current = "rootScreen"
+
+            MDTextButton:
+                text: "Or Login with Touch ID"
+                pos_hint: {"center_x": .5}
+                color: gch("#F2CB05")
+
+
+<TextField@MDTextField>
+    mode: 'fill'
+    line_anim: True
+    fill_color: gch("#0E1259")

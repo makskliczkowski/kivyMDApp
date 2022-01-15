@@ -1,0 +1,81 @@
+
+
+<Button>
+    # for all buttons at the same time
+    font_size : 32
+    # for images in background
+    background_normal: ''
+    background_color:(1,0,0.3,1)
+
+<Label>
+    font_size:25
+
+<Grid>
+    fridge:fridge
+    stuff:stuff
+    startDate:startDate
+    endDate:endDate
+    # background color
+    canvas.before:
+        Color:
+            rgba: (1,0,1,1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+
+    BoxLayout:
+        orientation:"vertical"
+        size: root.width, root.height
+
+        BoxLayout:
+            orientation:"horizontal"
+            spacing:20
+            padding:30
+
+            Button:
+                text:"Fridge"
+                id:fridge
+                on_press:root.press()
+                size_hint:(1,None)
+                height:5
+
+            Button:
+                text:"Stuff"
+                id:stuff
+                size_hint:(1,None)
+                height:5
+        BoxLayout:
+            orientation:"horizontal"
+            spacing:20
+            padding:30
+
+            Label:
+                text:"Starting date:"
+                id:startDate
+            
+            Label:
+                text:"Ending date:"
+                id:endDate
+
+        Label:
+            text:"CHART HERE"
+            pos_hint:{'center_x':0.5}
+            size_hint: (0.8,0.5)
+
+        Label:
+            text:"Spendings:"
+            background_color:(1,0,0.3,1)
+            canvas.before:
+                Color:
+                    rgba: self.background_color
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            # text color
+            color : (1,0,2,0.3)
+            bold : True
+            italic : True
+            outline_color:(0,0,0)
+            outline_width:3
+            
