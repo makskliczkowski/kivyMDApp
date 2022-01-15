@@ -65,6 +65,7 @@
         MyFloatingButton:
             data:app.data
 
+
             
 
 <MyOverviewBox>
@@ -123,12 +124,12 @@
             Rectangle:
                 size: self.size
                 pos: self.pos
+
         MySeeAllButton:
             padding: dp(10)
             adaptive_height: True
 
             MyLabel:
-                text: "SEE ALL"
                 halign: "center"
                 font_style: "Button"
 
@@ -162,27 +163,21 @@
             pos: self.pos
 
 <MySeeAllButton>
-	padding_x: self.width/2
-	canvas.before:
-        Color:
-            rgba: gch("#FFFFFF")
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    md_bg_color: gch("#F2CB05")
-    text_color: gch("#0E1259")
-    font_style : "Button"
-    color: gch("#0E1259")
+	padding_x: self.width/1.2
+    icon:"pencil"
+    type:"small"
+    md_bg_color:gch(app.buttons["small"]["md_bg_color"])
+    icon_color:gch(app.buttons["small"]["text_color"])
 	pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
 <MyFloatingButton>
     icon: "plus"
-
+    #md_bg_color: app.theme_cls.primary_dark
     color: gch("#F2CB05")
 
     opposite_colors: True
     root_button_anim: True
     rotation_root_button: True
     #hint_animation: True
-    right_pad:True
+    right_pad:False
     callback: app.callback

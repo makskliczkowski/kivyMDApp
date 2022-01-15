@@ -9,51 +9,63 @@
         Rectangle:
             pos: self.pos
             size: self.size
-
-    MDBoxLayout:
-        adaptive_height: True
-        orientation: "vertical"
-        spacing: dp(80)
-        padding: dp(30)
-        pos_hint: {"center_x": .5}
-
-        Image:
-            source: f"{environ['MYDB_ROOT']}/assets/images/logo.png"
+    ScrollView:
+        id: reg_scroll
+        MDBoxLayout:
+            adaptive_height: True
+            orientation: "vertical"
+            spacing: dp(80)
+            padding: dp(30)
             pos_hint: {"center_x": .5}
-            size_hint: None, None
 
-        MDBoxLayout:
-            adaptive_height: True
-            orientation: "vertical"
-            spacing: dp(25)
-			
-            MDTextField:
-				id:username
-                hint_text: "Username"
-				color_active:app.theme_cls.primary_light
-            MDTextField:
-				id:pw
-                hint_text: "Password"
-				color_active:app.theme_cls.primary_light
-                password: True
-                password_mask: "•"
-
-        MDBoxLayout:
-            adaptive_height: True
-            orientation: "vertical"
-            spacing: dp(20)
-
-            MDIconButton:
-                icon: 'fingerprint'
+            Image:
+                source: f"{environ['MYDB_ROOT']}/assets/images/logo.png"
                 pos_hint: {"center_x": .5}
-                user_font_size: dp(62)
-                _no_ripple_effect: True
-                on_release: root.parent.current = "rootScreen"
+                size_hint: None, None
 
-            MDTextButton:
-                text: "Or Login with Touch ID"
-                pos_hint: {"center_x": .5}
-                color: gch("#F2CB05")
+            MDBoxLayout:
+                adaptive_height: True
+                orientation: "vertical"
+                spacing: dp(25)
+                
+                MDTextField:
+                    id: username
+                    hint_text: "Username"
+                    icon_right : "account"
+                    color_active:app.theme_cls.primary_light
+                MDTextField:
+                    id:pw
+                    icon_right : "eye-off"
+                    hint_text: "Password"
+                    color_active:app.theme_cls.primary_light
+                    password: True
+                    password_mask: "•"
+                MDRoundFlatButton:
+                    id:login
+                    text: "Log in"
+                    type: "large"
+                    font_size: 20
+                    pos_hint:{"center_x":0.5}
+                    on_press: root.logger()
+
+            MDBoxLayout:
+                adaptive_height: True
+                orientation: "vertical"
+                spacing: dp(20)
+
+                MDIconButton:
+                    icon: 'fingerprint'
+                    pos_hint: {"center_x": .5}
+                    user_font_size: dp(75)
+                    _no_ripple_effect: True
+                    on_release: root.parent.current = "rootScreen"
+
+                MDTextButton:
+                    text: "Or Login with Touch ID"
+                    pos_hint: {"center_x": .5}
+                    type:"large"
+                    user_font_size: dp(120)
+                    color: gch("#F2CB05")
 
 
 <TextField@MDTextField>

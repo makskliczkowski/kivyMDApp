@@ -7,7 +7,7 @@ from kivymd.uix.screen import MDScreen
 from kivy.utils import get_color_from_hex as gch
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivymd.uix.button import MDFloatingActionButtonSpeedDial, MDFlatButton, MDTextButton, MDFillRoundFlatButton
+from kivymd.uix.button import MDFloatingActionButtonSpeedDial, MDFlatButton, MDFloatingActionButton, MDFillRoundFlatButton
 
 # main root screen
 class MyRootScreen(MDScreen):
@@ -20,9 +20,9 @@ class MyListItem(ThemableBehavior, RectangularRippleBehavior, MDBoxLayout):
     tertiary_text = StringProperty()
     bar_color = ColorProperty(get_random_color())
 
-class MySeeAllButton(MDFillRoundFlatButton):
+class MySeeAllButton(MDFloatingActionButton):
     pass
 
-class MyFloatingButton(MDFloatingActionButtonSpeedDial,RectangularRippleBehavior, MDTextButton):
+class MyFloatingButton(MDFloatingActionButtonSpeedDial,RectangularRippleBehavior):
 
     pass
