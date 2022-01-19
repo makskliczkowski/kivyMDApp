@@ -6,16 +6,16 @@
 #: import MyNavigationBar libs.baseclass.tabnavigation.MyNavigationBar
 #: import MyOverviewScreen libs.baseclass.overview_screen.MyOverviewScreen
 #: import MyAccountsScreen libs.baseclass.accounts_screen.MyAccountsScreen
-#: import FoodScreen libs.baseclass.food_screen.FoodScreen
+#: import FoodScreen libs.baseclass.stuff_screen.FoodScreen
 #: import StuffScreen libs.baseclass.stuff_screen.StuffScreen
 #: import MyBudgetsScreen libs.baseclass.budgets_screen.MyBudgetsScreen
 
 
 <MyRootScreen>
-    id:rootscr
     md_bg_color: gch("#0E1259")
-
+    id : root_scr
     MDBoxLayout:
+        id : box_layout
         orientation: 'vertical'
 	
         MyNavigationBar:
@@ -80,7 +80,7 @@
                     scr_manager.transition.direction = "left"
                     scr_manager.current = "FOOD"
 
-        ScreenManager:
+        MyScreenManager:
             id: scr_manager
 			canvas.before:
 				Color:
@@ -89,24 +89,31 @@
 					pos:self.pos 
 					size:self.size
             MyOverviewScreen:
+                id : overview
                 name: "OVERVIEW"
 
             MyAccountsScreen:
+                id : accounts
                 name: "ACCOUNTS"
 
             MyBudgetsScreen:
+                id : budgets
                 name: "BUDGETS"
             
             TransportScreen:
+                id : transport
                 name: "TRANSPORT"
 
             HealthScreen:
+                id : health
                 name: "HEALTH"
             
             StuffScreen:
+                id : stuff
                 name: "STUFF"
 
             FoodScreen:
+                id : food
                 name: "FOOD"
 
 
@@ -115,9 +122,9 @@
     effect_cls: StiffScrollEffect
 
 
-<MyLabel@MDLabel>
+<MyLabel>
     adaptive_height: True
-    color: gch("#2E83F2")
+    color: gch("#000000")
     
 <MyListItem>
     size_hint_y: None
@@ -189,3 +196,38 @@
             halign: "center"
             pos_hint: {"center_y": .5}
             theme_text_color: "Hint"
+
+
+<MyCheckBox>
+    cols : 2
+    rows : 1
+    spacing : dp(3)
+
+
+<MySearchBox>
+    row_force_default : True
+    row_default_height : dp(60)
+    width : self.parent.width
+    padding : dp(15)
+    #spacing : dp(5)
+    cols : 1
+    rows : 1
+    #orientation : 'horizontal'
+    MyTextField : 
+        id : txtfield
+        hint_text : root.name
+        suggestion_text : root.name
+
+<MySearchBoxUgly>
+    row_force_default : True
+    row_default_height : dp(60)
+    width : self.parent.width
+    padding : dp(15)
+    #spacing : dp(5)
+    cols : 1
+    rows : 1
+    #orientation : 'horizontal'
+    TextInput : 
+        id : txtfield
+        hint_text : root.name
+        suggestion_text : root.name

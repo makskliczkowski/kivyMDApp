@@ -1,28 +1,34 @@
 #: import gch kivy.utils.get_color_from_hex
 #: import randColor libs.common.randColor
-
+#: import grc kivy.utils.get_random_color
+#: import MySearchBox libs.baseclass.root_screen.MySearchBox
+#: import MySeeAllButton libs.baseclass.root_screen.MySeeAllButton
+#: import MyScreenManager libs.baseclass.root_screen.MyScreenManager
 <MyOverviewScreen>
-
-
+    id : overview
     FloatLayout:
 
         ScrollView:
 
             MDList:
+                id : box_list
                 spacing: dp(5)
 
                 AlertBox:
                     
 
                 MyOverviewBox:
+                    id:accounts
                     title: "Accounts"
                     money: "$ 12,134.49"
-                    text: ["Current", "Home savings", "Car savings"]
-                    secondary_text: ["••••••1234", "••••••5678", "••••••9012"]
-                    tertiary_text: ["$ 2,215.13", "$ 8,678.88", "$ 987.48"]
-                    bar_color: [gch("#1EB980"), gch("#1EB980"), gch("#1EB580")]
+                    text: ["Current", "Home savings"]
+                    secondary_text: ["••••••1234", "••••••5678"]
+                    tertiary_text: ["$ 2,215.13", "$ 8,678.88"]
+                    bar_color: [gch("#1EB980"), gch("#1EB980")]
 
+                    
                 MyOverviewBox:
+                    id:budgets
                     title: "Budgets"
                     money: "$ 480.00"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
@@ -31,47 +37,244 @@
                     bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
 
                 MyOverviewBox:
+                    id : transport
                     title: "Transport"
                     money: "$ 480.00"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
                     secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
                     tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
                     bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBoxUgly :
+                            id : nam
+                            name : 'type'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : quant
+                            name : 'place'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : pric
+                            name : 'price'
+                            multiline : True
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBox :
+                            id : plc
+                            name : 'place'
+                            multiline : False
+                        MySearchBox :
+                            id : plc_adrr
+                            name : 'address'
+                            multiline : False
 
                 MyOverviewBox:
+                    id : health
                     title: "Health"
                     money: "$ 480.00"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
                     secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
                     tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
                     bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
-                    
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBoxUgly :
+                            id : h_nam
+                            name : 'name'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : h_typ
+                            name : 'type'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : h_pric
+                            name : 'price'
+                            multiline : True
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBox :
+                            id : h_plc
+                            name : 'place'
+                            multiline : False
+                        MySearchBox :
+                            id : h_plc_adrr
+                            name : 'address'
+                            multiline : False
                 MyOverviewBox:
+                    id : stuff
                     title: "Stuff"
                     money: "$ 480.00"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
                     secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
                     tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
                     bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBoxUgly :
+                            id : s_nam
+                            name : 'name'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : s_quant
+                            name : 'owned'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : s_unit
+                            name : 'unit'
+
+                        MySearchBoxUgly :
+                            id : s_needed
+                            name : 'needed'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : s_pric
+                            name : 'price'
+                            multiline : True
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBox :
+                            id : plc
+                            name : 'place'
+                            multiline : False
+                        MySearchBox :
+                            id : plc_adrr
+                            name : 'address'
+                            multiline : False
 
                 MyOverviewBox:
+                    id : food
                     title: "Food"
-                    money: "$ 1,732.69"
-                    text: ["RedPay Credit", "Rent", "TabFine Credit"]
-                    secondary_text: ["29 Jan", "9 Feb", "22 Feb"]
-                    tertiary_text: ["$ 45.36", "$ 1,200.00", "$ 87.33"]
-                    bar_color: [gch("#FFCF44"), gch("#FF6859"), gch("#F8BBD0")]
+                    money: "MoneySpentOnFood"
+                    text: ["h","e","y"]
+                    secondary_text: ["h","e","y"]
+                    tertiary_text: ["h","e","y"]
+                    bar_color: [grc(), grc(), grc()]
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBoxUgly :
+                            id : f_nam
+                            name : 'name'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : f_quant
+                            name : 'owned'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : f_unit
+                            name : 'unit'
+
+                        MySearchBoxUgly :
+                            id : f_needed
+                            name : 'needed'
+                            multiline : True
+                        MySearchBoxUgly :
+                            id : f_pric
+                            name : 'price'
+                            multiline : True
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBox :
+                            id : f_plc
+                            name : 'place'
+                            multiline : False
+                        MySearchBox :
+                            id : f_plc_adrr
+                            name : 'address'
+                            multiline : False
+                    MDBoxLayout:
+                        padding: dp(20)
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos         
+                        MySeeAllButton:
+                            id : see_all_button_food
+                            icon : 'plus'
+                            on_release:
+                                root.app.insertDataFood(f_nam.ids.txtfield.text, f_quant.ids.txtfield.text, f_unit.ids.txtfield.text, f_needed.ids.txtfield.text, f_pric.ids.txtfield.text, f_plc.ids.txtfield.text, f_plc_adrr.ids.txtfield.text)
+                                f_nam.ids.txtfield.text = ''
+                                f_quant.ids.txtfield.text = ''
+                                f_unit.ids.txtfield.text = '' 
+                                f_needed.ids.txtfield.text = ''
+                                f_pric.ids.txtfield.text = '' 
+                                f_plc.ids.txtfield.text = ''
+                                f_plc_adrr.ids.txtfield.text = ''
+                                #overview.parent.root.parent
+                                #overview.current : "FOOD"
+                            MyLabel:
+                                halign: "center"
+                                font_style: "Button"
                     
         MyFloatingButton:
             data:app.data
 
 
-            
 
 <MyOverviewBox>
     adaptive_height: True
     orientation: 'vertical'
-
+    id : overview
     canvas.before:
         Color:
             rgba: gch("#2E83F2")
@@ -96,42 +299,9 @@
             font_size:dp(25)
             color: gch("#FFFFFF")
 
-    MyList:
-        MyListItem:
-            text: root.text[0]
-            secondary_text: root.secondary_text[0]
-            tertiary_text: root.tertiary_text[0]
-            bar_color: root.bar_color[0]
 
-        MyListItem:
-            text: root.text[1]
-            secondary_text: root.secondary_text[1]
-            tertiary_text: root.tertiary_text[1]
-            bar_color: root.bar_color[1]
 
-        MyListItem:
-            text: root.text[2]
-            secondary_text: root.secondary_text[2]
-            tertiary_text: root.tertiary_text[2]
-            bar_color: root.bar_color[2]
-    MDBoxLayout:
-        padding: dp(20)
-        orientation: 'vertical'
-        adaptive_height: True
-        canvas.before:
-            Color:
-                rgba: gch("#FFFFFF")
-            Rectangle:
-                size: self.size
-                pos: self.pos
 
-        MySeeAllButton:
-            padding: dp(10)
-            adaptive_height: True
-
-            MyLabel:
-                halign: "center"
-                font_style: "Button"
 
 
 <AlertBox@MDBoxLayout>
@@ -163,12 +333,13 @@
             pos: self.pos
 
 <MySeeAllButton>
-	padding_x: self.width/1.2
     icon:"pencil"
     type:"small"
     md_bg_color:gch(app.buttons["small"]["md_bg_color"])
     icon_color:gch(app.buttons["small"]["text_color"])
 	pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    anchor_x: 'center'
+    anchor_y: 'center'
 
 <MyFloatingButton>
     icon: "plus"

@@ -2,12 +2,14 @@ import os
 import sys
 import random
 from pathlib import Path
+from unicodedata import category
 from kivy.lang import Builder
 from kivymd.app import MDApp
-
+from libs.baseclass.register_screen import LoginAlert
+from libs.baseclass.root_screen import MyScreenManager
 # for databases
 import mysql.connector
-
+from mysql.connector import errorcode
 
 
 
@@ -31,7 +33,9 @@ KV = """
 #:import MyRegisterScreen libs.baseclass.register_screen.MyRegisterScreen
 #:import MyRootScreen libs.baseclass.root_screen.MyRootScreen
 
+
 ScreenManager:
+    id : scr_mng_app
     transition: FallOutTransition()
 
     MyRegisterScreen:
@@ -44,32 +48,82 @@ ScreenManager:
 
 """
 
+class MyDatabase(object):
+    def __init__(self):
+        self.password = None
+        self.login = None
+        self.host = None
+        self.database = None
+        self.mydb = None
+        self.cur = None
+        self.fetcher = None
+        
+    def checkConnection(self):
+        return (self.mydb is None)
+    
+    def commit(self):
+        self.mydb.commit()
+    
+    def fetch(self):
+        if not self.checkConnection():
+            self.fetcher = self.cur.fetchall()
+        self.fetcher
+        
+    """ WORKING CONNECTION """
+    def connect(self, login, password, host = "localhost", database = "shopper"):
+        print(f"\n\n\nConnecting to {login}@{host} with database : {database}\n\n\n")
+    
+        self.mydb = mysql.connector.connect(
+                host = host,
+                user = login,
+                password = password,
+                database = database
+            )
+        self.cur = self.mydb.cursor()
+    
+    """ WORKING QUERY SINGLE """
+    def querySingle(self, query):
+        try:
+            self.cur.execute(query)
+        except:
+            print(f"The Query:\n\t{query}\nhas not worked")
+    
+    """ WORKING QUERY SINGLE """
+    def query(self, query, params):
+        try:
+            self.cur.execute(query, params)
+        except:
+            print(f"The Query:\n\t{query}\nwith params:\n\t{params}\nhas not worked")
+    
+    def __del__(self):
+        self.mydb.close()
+    
+
+
+def insertData(place, address, db):
+    curs = db.mydb.cursor()
+    try:
+        # add into places
+        curs.execute("""INSERT INTO places (name, address) VALUES (%s , %s )""", (place, address))
+        print("\n\ninserted the places")
+        # find index of the place
+        curs.execute("""SELECT id FROM places WHERE name = %s AND address = %s""", (place,address))
+        fetched = curs.fetchall()
+        id_place = int(fetched[0][0])
+        print(f"\n\nselected the places id {id_place}")
+        # insert into log
+        curs.execute("""INSERT INTO log (place, time) VALUES (%s , %s)""", (id_place, random.randint(1, 100)))
+        print("\n\ninserted the log")
+        curs.execute("SELECT DISTINCT id FROM log ORDER BY id DESC LIMIT 1;")
+        fetched = curs.fetchall()
+        id_log = int(fetched[0][0])
+        print(f"\n\nselected the log id {id_log}")
+        return curs, id_place, id_log
+    except:
+        print("couldn't update logs")
+        
 
 class MDRally(MDApp):
-
-    def use_database(self):
-        # our database
-        if self.mydb is not None:
-            try:
-                # create a cursor
-                self.curs = self.mydb.cursor()
-                
-                # execute database if not exists create
-                self.curs.execute("CREATE DATABASE If NOT EXISTS mydb")
-                self.curs.execute("SHOW DATABASES")
-                
-                # show all of them
-                for db in self.curs:
-                    print(db)
-                    
-                # commit    
-                self.mydb.commit()
-                
-                # close connection
-                self.mydb.close()
-            except:
-                print("error")
-
     data = {
         'Food': 'pizza',
         'Stuff': 'tie',
@@ -86,17 +140,93 @@ class MDRally(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # database stuff
-        self.mydb = None
-        self.curs = None
-        
-        
-        self.title = "Spendings"
+        self.myDatabase = MyDatabase()
+        # categories
+        self.categories = None                                                  # spending categories
+        self.title = "Spendings application"
         self.icon = f"{os.environ['MYDB_ROOT']}/assets/images/logo.png"
 
     def callback(self, instance):
         print(instance.icon)
+        
+    def insertDataFood(self, name , owned , unit , needed , price, place, address):
+        curs, id_place, id_log = insertData(place, address, self.myDatabase)
+        try:
+            # iterate through the name elements
+            items = name.split("\n")
+            #print("\n\n",items)
+            units = unit.split("\n")
+            owneds = owned.split("\n")
+            neededs = needed.split("\n")
+            prices = price.split("\n")
+            # take the smallest length or assume rest has default
+            length = len(items)#min(len(items), len(units), len(owneds), len(neededs), len(prices))
+            full_price = 0
+            for i in range(length):
+                
+                # insert item
+                curs.execute("""INSERT INTO groceries (name, unit, owned, needed) VALUES (%s , %s, %s, %s)"""
+                                          , (items[i], units[i], owneds[i], neededs[i]))
+                print("inserted into food")
+                # take id
+                curs.execute("""SELECT DISTINCT id FROM groceries WHERE name = %s AND unit = %s""", (items[i], units[i]))
+                self.fetched = curs.fetchall()
+                id_item = int(self.fetched[0][0])
+                print(f"\n\nselected the food id {id_item}")
+                # add to shopping log
+                curs.execute("""INSERT INTO shopping (purchase_id, groceries_id, price) VALUES (%s , %s, %s)"""
+                                          ,(id_log , id_item, prices[i]))
+                print("inserted into shopping")
+                full_price += float(prices[i])
+            
+            
+            self.myDatabase.commit()
+            curs.close()
+            
+            print(f"\n\n\n full_price : {full_price}") 
+            return full_price
+        except:
+            print("something wrong in here, try again please\n\n")
+            
+    def insertDataTransport(self, type, destination, price, place, address):
+        curs, id_place, id_log = insertData(place, address, self.myDatabase)
+        try:
+            # iterate through the name elements
+            types = type.split("\n")
+            #print("\n\n",items)
+            destinations = destination.split("\n")
+            prices = price.split("\n")
+            length = len(types)#min(len(items), len(units), len(owneds), len(neededs), len(prices))
+            full_price = 0
+            for i in range(length):
+                # insert item
+                curs.execute("""INSERT INTO transport (type, place) VALUES (%s , %s)"""
+                                          , (types[i], destinations[i]))
+                print("inserted into food")
+                # take id
+                curs.execute("""SELECT DISTINCT id FROM transport WHERE type = %s AND place = %s""", (types[i], destinations[i]))
+                self.fetched = curs.fetchall()
+                id_item = int(self.fetched[0][0])
+                print(f"\n\nselected the food id {id_item}")
+                # add to shopping log
+                curs.execute("""INSERT INTO shopping (purchase_id, transport_id, price) VALUES (%s , %s, %s)"""
+                                          ,(id_log , id_item, prices[i]))
+                print("inserted into shopping")
+                full_price += float(prices[i])
+            
+            
+            self.myDatabase.commit()
+            curs.close()
+            
+            print(f"\n\n\n full_price : {full_price}") 
+            return full_price
+        except:
+            print("something wrong in here, try again please\n\n")
+                  
 
-    def build(self):
+
+
+    def build(self):         
         self.theme_cls.primary_hue = "600"  # "500"
         self.theme_cls.primary_palette = "Yellow"
         self.theme_cls.theme_style = "Dark" 
@@ -140,12 +270,13 @@ class MDRally(MDApp):
                 "Money": [FONT_PATH + "Lato-Bold", 48, False, 0],
             }
         )
-        
-        
-        self.use_database()
-        
-        
+
         return Builder.load_string(KV)
 
+        
+        
 
-MDRally().run()
+
+if __name__ == '__main__':
+    
+    MDRally().run()

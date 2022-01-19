@@ -1,6 +1,6 @@
 #: import environ os.environ
 #: import gch kivy.utils.get_color_from_hex
-
+#: import MyTextField libs.baseclass.register_screen.MyTextField 
 
 <MyRegisterScreen>
     canvas:
@@ -14,7 +14,7 @@
         MDBoxLayout:
             adaptive_height: True
             orientation: "vertical"
-            spacing: dp(80)
+            spacing: dp(50)
             padding: dp(30)
             pos_hint: {"center_x": .5}
 
@@ -22,11 +22,12 @@
                 source: f"{environ['MYDB_ROOT']}/assets/images/logo.png"
                 pos_hint: {"center_x": .5}
                 size_hint: None, None
+                size: self.texture_size
 
             MDBoxLayout:
                 adaptive_height: True
                 orientation: "vertical"
-                spacing: dp(25)
+                spacing: dp(15)
                 
                 MDTextField:
                     id: username
@@ -51,14 +52,16 @@
             MDBoxLayout:
                 adaptive_height: True
                 orientation: "vertical"
-                spacing: dp(20)
+                spacing: dp(5)
 
                 MDIconButton:
                     icon: 'fingerprint'
                     pos_hint: {"center_x": .5}
                     user_font_size: dp(75)
                     _no_ripple_effect: True
-                    on_release: root.parent.current = "rootScreen"
+                    on_release: 
+                        root.rootLogin()
+                        root.parent.current = "rootScreen"
 
                 MDTextButton:
                     text: "Or Login with Touch ID"
@@ -68,7 +71,13 @@
                     color: gch("#F2CB05")
 
 
-<TextField@MDTextField>
+<MyTextField>
+    height: "30dp"
     mode: 'fill'
-    line_anim: True
-    fill_color: gch("#0E1259")
+    color_mode: 'custom'
+    helper_text_mode: "persistent"
+    normal_color: app.theme_cls.accent_color
+    color_active: 1, 0, 0, 1
+    icon_left : 'plus'
+    current_hint_text_color : gch("#2E83F2")
+    color : gch("#2E83F2")

@@ -1,7 +1,6 @@
 <PieChartLine>
     size_hint: (1, None)
-    height: dp(310)
-
+    height: dp(110)
     canvas:
         Color:
             rgba: root.line_color[0]
@@ -31,6 +30,7 @@
             circle:
                 (self.center_x, self.center_y, min(self.width, self.height)
                 / 2, root.angle_start[3], root.angle_end[3])
+
     MDLabel:
         text: root.text
         color: gch("#0E1259")

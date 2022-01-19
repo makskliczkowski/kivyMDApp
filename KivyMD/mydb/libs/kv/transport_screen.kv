@@ -2,13 +2,13 @@
 #: import PieChartLine libs.baseclass.pie_chart_line.PieChartLine
 #: import MyCheckBox libs.baseclass.root_screen.MyCheckBox
 #: import MyTab libs.baseclass.root_screen.MyTab
-#: import FoodCheckBox libs.baseclass.stuff_screen.StuffCheckBox
+#: import FoodCheckBox libs.baseclass.stuff_screen.TransportCheckBox
 #: import MySearchBox libs.baseclass.root_screen.MySearchBox
-#: import grc kivy.utils.get_random_color
-<StuffScreen>
-    id : stuff
-    ScrollView:
 
+<TransportScreen>
+    id:transport
+    ScrollView:
+        id : scroll
         adaptive_height: False
         MDBoxLayout:
             #cols : 1
@@ -26,19 +26,12 @@
                 height : dp(60)
                 size_hint : (1, None)
                 adaptive_height: False
-                
-                FoodCheckBox:
+                TransportCheckBox:
                     id : fst
                     text : list(root.cols.keys())[1]
-                FoodCheckBox:
+                TransportCheckBox:
                     id : snd
                     text : list(root.cols.keys())[2]
-                FoodCheckBox:
-                    id : third
-                    text : list(root.cols.keys())[3]
-                FoodCheckBox :
-                    id : fourth
-                    text : list(root.cols.keys())[4]
 
             MDGridLayout:
                 cols : 4
@@ -58,13 +51,6 @@
                     id : sndSearch
                     name : list(root.cols.keys())[2]
 
-                MySearchBox : 
-                    id : thrdSearch
-                    name : list(root.cols.keys())[3]
-
-                MySearchBox : 
-                    id : fourthSearch
-                    name : list(root.cols.keys())[4]
 
 
 
@@ -89,7 +75,7 @@
                         pos_hint: {'center_x':0.5}
                         id : queryme
                         icon : 'eye'
-                        on_release : stuff.printQuery()
+                        on_release : transport.printQuery()
                     MySeeAllButton :
                         anchor_x: 'center'
                         anchor_y: 'center'
@@ -101,7 +87,7 @@
             #anchor_x: 'center'
             #anchor_y: 'center'
 
-<StuffCheckBox>
+<TransportCheckBox>
     id : transbox
     #orientation : 'vertical'
     adaptive_height: False

@@ -1,0 +1,12 @@
+INSERT INTO health (name,type) VALUES ('Ibuprom','painkiller');
+INSERT INTO health (name,type) VALUES ('APAP','painkiller');
+INSERT INTO health (name,type) VALUES ('Aspirin','painkiller');
+INSERT INTO health (name,type) VALUES ('Magne B6','vitamins');
+INSERT INTO health (name,type) VALUES ('Rutinoscorbin','vitamins');
+INSERT INTO health (name,type) VALUES ('lek. Henryk Nowak','dentist');
+INSERT INTO health (name,type) VALUES ('lek. Joanna Kowalska','dentist');
+INSERT INTO health (name,type) VALUES ('lek. Joanna Kowalska','dentist');
+INSERT INTO health (name,type) VALUES ('lek. Renata Teodorczyk','dentist');
+INSERT INTO health (name,type) VALUES ('lek. Renata Teodorczyk','dentist');
+INSERT INTO health (name,type) VALUES ('lek. Jerzy Wachowicz','orthopedist');
+INSERT INTO health (name,type) VALUES ('lek. Jerzy Wachowicz','orthopedist');
