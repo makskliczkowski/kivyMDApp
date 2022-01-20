@@ -54,11 +54,11 @@
                         adaptive_height: True
                         orientation: 'horizontal'
                         MySearchBoxUgly :
-                            id : nam
+                            id : typ
                             name : 'type'
                             multiline : True
                         MySearchBoxUgly :
-                            id : quant
+                            id : plc
                             name : 'place'
                             multiline : True
                         MySearchBoxUgly :
@@ -82,7 +82,31 @@
                             id : plc_adrr
                             name : 'address'
                             multiline : False
-
+                    MDBoxLayout:
+                        padding: dp(20)
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos         
+                        MySeeAllButton:
+                            id : see_all_button_food
+                            icon : 'plus'
+                            on_release:
+                                root.app.insertDataTransport(typ.ids.txtfield.text, plc.ids.txtfield.text, pric.ids.txtfield.text, plc.ids.txtfield.text, plc_adrr.ids.txtfield.text)
+                                typ.ids.txtfield.text = ''
+                                plc.ids.txtfield.text = ''
+                                pric.ids.txtfield.text = '' 
+                                plc.ids.txtfield.text = ''
+                                plc_adrr.ids.txtfield.text = ''
+                                #overview.parent.root.parent
+                                #overview.current : "FOOD"
+                            MyLabel:
+                                halign: "center"
+                                font_style: "Button"
                 MyOverviewBox:
                     id : health
                     title: "Health"
@@ -129,6 +153,31 @@
                             id : h_plc_adrr
                             name : 'address'
                             multiline : False
+                    MDBoxLayout:
+                        padding: dp(20)
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos         
+                        MySeeAllButton:
+                            id : see_all_button_food
+                            icon : 'plus'
+                            on_release:
+                                root.app.insertDataHealth(typ.ids.txtfield.text, plc.ids.txtfield.text, pric.ids.txtfield.text, h_plc.ids.txtfield.text, h_plc_adrr.ids.txtfield.text)
+                                typ.ids.txtfield.text = ''
+                                plc.ids.txtfield.text = ''
+                                pric.ids.txtfield.text = '' 
+                                plc.ids.txtfield.text = ''
+                                plc_adrr.ids.txtfield.text = ''
+                                #overview.parent.root.parent
+                                #overview.current : "FOOD"
+                            MyLabel:
+                                halign: "center"
+                                font_style: "Button"
                 MyOverviewBox:
                     id : stuff
                     title: "Stuff"
