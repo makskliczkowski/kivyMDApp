@@ -9,13 +9,8 @@
     id : food_screen
 
     MDBoxLayout:
-        #cols : 1
         id: lst
         orientation : 'vertical'
-        #rows : 4
-        #size_hint : (1,1)
-        #row_force_default : True
-        #adaptive_height: True
         MDGridLayout:
             cols : 4
             id : elements
@@ -48,7 +43,7 @@
             rows : 1
             row_force_default : True
             row_default_height : dp(60)
-            height : dp(60)
+            height : dp(80)
             size_hint : (1, None)
             adaptive_height: False
 
@@ -80,9 +75,8 @@
             width : self.parent.width
             row_force_default : True
             row_default_height : dp(120)
-            height : dp(120)
+            height : dp(140)
             size_hint: None, None
-
             MDBoxLayout:
                 cols : 2
                 spacing: dp(10)
@@ -103,17 +97,8 @@
                     width : self.parent.width/2
                     minimum_width : self.parent.parent.width/2
                     #on_release : food_screen.printQuery()
-        ScrollView:
-            id : scroll
-            # here we can set bar color
-            bar_color: [0, 0, 255, 1]
-            do_scroll_y : True
-            size: self.size
-            # here we can set bar width
-            bar_width: 40
-            #always_overscroll : True
-            MDBoxLayout:
-                id : scrollbox
+
+
 <FoodCheckBox>
     id : foodbox
     spacing : dp(30)

@@ -52,7 +52,8 @@ class MyRegisterScreen(MDScreen):
             # commit    
             self.app.myDatabase.commit()
     
-    
+    def setMoneyLater(self, dt = 5):
+        self.parent.ids.root_scr.ids.overview.setMoneyOnStart()
     """ THE LOGGER WORKS """
     def logger(self):
         print(self.ids)
@@ -60,7 +61,10 @@ class MyRegisterScreen(MDScreen):
         password = self.ids.pw.text
         try:
             self.app.myDatabase.connect(login, password)
+            self.setMoneyLater()
             self.parent.current = "rootScreen"
+            
+            
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                     print("Something is wrong with your user name or password")
@@ -74,10 +78,12 @@ class MyRegisterScreen(MDScreen):
             
             self.ids.pw.text = ""
         self.use_database()
+        #Clock.schedule_once(self.setMoneyLater, 5)
         
     def rootLogin(self):
         try:
             self.app.myDatabase.connect("root", "haroharo")
+            self.parent.ids.root_scr.ids.overview.setMoneyOnStart()
         except:
             LoginAlert('Damn, something\'s wrong')
         self.use_database()

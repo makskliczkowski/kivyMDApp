@@ -29,17 +29,57 @@
                     
                 MyOverviewBox:
                     id:budgets
-                    title: "Budgets"
-                    money: "$ 480.00"
-                    text: ["Coffee shops", "Groceries", "Restaurants"]
-                    secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
-                    tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
-                    bar_color: [gch("#BBDEFB"), gch("#BA68C8"), gch("#64B5F6")]
-
+                    title: "Backup"
+                    money: "Do some, won't hurt"
+                    MDBoxLayout:
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        adaptive_height: True
+                        orientation: 'horizontal'
+                        MySearchBox :
+                            id : dest
+                            name : 'destination'
+                            multiline : False
+                    MDBoxLayout:
+                        padding: dp(20)
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        spacing : dp(5)
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos         
+                        MySeeAllButton:
+                            id : save
+                            icon : 'cloud-upload'
+                            font_size: dp(84) 
+                            on_release:
+                                self.dumpDB(dest.text)
+                        MyLabel:
+                            halign: "center"
+                            font_style: "Button"
+                            text : "save"  
+                        MySeeAllButton:
+                            id : load
+                            icon : 'cloud-download'
+                            font_size: dp(84) 
+                            on_release:
+                                self.loadDB(dest.text)
+                            
+                        MyLabel:
+                            halign: "center"
+                            font_style: "Button"
+                            text : "load"                             
                 MyOverviewBox:
                     id : transport
                     title: "Transport"
-                    money: "$ 480.00"
+                    money: "0 Venezuelan Bolivars"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
                     secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
                     tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
@@ -94,9 +134,10 @@
                                 pos: self.pos         
                         MySeeAllButton:
                             id : see_all_button_food
-                            icon : 'plus'
+                            icon : 'car-limousine'
                             on_release:
-                                root.app.insertDataTransport(typ.ids.txtfield.text, plc.ids.txtfield.text, pric.ids.txtfield.text, plc.ids.txtfield.text, plc_adrr.ids.txtfield.text)
+                                #root.app.insertDataTransport(typ.ids.txtfield.text, plc.ids.txtfield.text, pric.ids.txtfield.text, plc.ids.txtfield.text, plc_adrr.ids.txtfield.text)
+                                root.updateMoneyTransport()
                                 typ.ids.txtfield.text = ''
                                 plc.ids.txtfield.text = ''
                                 pric.ids.txtfield.text = '' 
@@ -110,7 +151,7 @@
                 MyOverviewBox:
                     id : health
                     title: "Health"
-                    money: "$ 480.00"
+                    money: "0 Venezuelan Bolivars"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
                     secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
                     tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
@@ -165,14 +206,15 @@
                                 pos: self.pos         
                         MySeeAllButton:
                             id : see_all_button_food
-                            icon : 'plus'
+                            icon : 'flask-round-bottom'
                             on_release:
-                                root.app.insertDataHealth(typ.ids.txtfield.text, plc.ids.txtfield.text, pric.ids.txtfield.text, h_plc.ids.txtfield.text, h_plc_adrr.ids.txtfield.text)
-                                typ.ids.txtfield.text = ''
-                                plc.ids.txtfield.text = ''
-                                pric.ids.txtfield.text = '' 
-                                plc.ids.txtfield.text = ''
-                                plc_adrr.ids.txtfield.text = ''
+                                #root.ids.money.text = root.app.insertDataHealth(h_nam.ids.txtfield.text, h_typ.ids.txtfield.text, h_pric.ids.txtfield.text, h_plc.ids.txtfield.text, h_plc_adrr.ids.txtfield.text)
+                                root.updateMoneyHealth()
+                                h_nam.ids.txtfield.text = ''
+                                h_typ.ids.txtfield.text = ''
+                                h_pric.ids.txtfield.text = '' 
+                                h_plc.ids.txtfield.text = ''
+                                h_plc_adrr.ids.txtfield.text = ''
                                 #overview.parent.root.parent
                                 #overview.current : "FOOD"
                             MyLabel:
@@ -181,7 +223,7 @@
                 MyOverviewBox:
                     id : stuff
                     title: "Stuff"
-                    money: "$ 480.00"
+                    money: "0 Venezuelan Bolivars"
                     text: ["Coffee shops", "Groceries", "Restaurants"]
                     secondary_text: ["$ 45.69 / $ 70.00", "$ 16.45 / $ 170.00", "$ 45.69 / $ 70.00"]
                     tertiary_text: ["$ 24.51", "$ 153.55", "$ 46.75"]
@@ -225,18 +267,43 @@
                         adaptive_height: True
                         orientation: 'horizontal'
                         MySearchBox :
-                            id : plc
+                            id : s_plc
                             name : 'place'
                             multiline : False
                         MySearchBox :
-                            id : plc_adrr
+                            id : s_plc_adrr
                             name : 'address'
                             multiline : False
-
+                    MDBoxLayout:
+                        padding: dp(20)
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        canvas.before:
+                            Color:
+                                rgba: gch("#FFFFFF")
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos         
+                        MySeeAllButton:
+                            id : see_all_button_stuff
+                            icon : 'creation'
+                            on_release:
+                                #root.app.insertDataStuff(s_nam.ids.txtfield.text, s_quant.ids.txtfield.text, s_unit.ids.txtfield.text, s_needed.ids.txtfield.text, s_pric.ids.txtfield.text, s_plc.ids.txtfield.text, s_plc_adrr.ids.txtfield.text)
+                                root.updateMoneyStuff()
+                                s_nam.ids.txtfield.text = ''
+                                s_quant.ids.txtfield.text = ''
+                                s_unit.ids.txtfield.text = '' 
+                                s_needed.ids.txtfield.text = ''
+                                s_pric.ids.txtfield.text = '' 
+                                s_plc.ids.txtfield.text = ''
+                                s_plc_adrr.ids.txtfield.text = ''
+                            MyLabel:
+                                halign: "center"
+                                font_style: "Button"
                 MyOverviewBox:
                     id : food
                     title: "Food"
-                    money: "MoneySpentOnFood"
+                    money: "0 Venezuelan Bolivars"
                     text: ["h","e","y"]
                     secondary_text: ["h","e","y"]
                     tertiary_text: ["h","e","y"]
@@ -299,9 +366,10 @@
                                 pos: self.pos         
                         MySeeAllButton:
                             id : see_all_button_food
-                            icon : 'plus'
+                            icon : 'carrot'
                             on_release:
-                                root.app.insertDataFood(f_nam.ids.txtfield.text, f_quant.ids.txtfield.text, f_unit.ids.txtfield.text, f_needed.ids.txtfield.text, f_pric.ids.txtfield.text, f_plc.ids.txtfield.text, f_plc_adrr.ids.txtfield.text)
+                                #root.app.insertDataFood(f_nam.ids.txtfield.text, f_quant.ids.txtfield.text, f_unit.ids.txtfield.text, f_needed.ids.txtfield.text, f_pric.ids.txtfield.text, f_plc.ids.txtfield.text, f_plc_adrr.ids.txtfield.text)
+                                root.updateMoneyFood()
                                 f_nam.ids.txtfield.text = ''
                                 f_quant.ids.txtfield.text = ''
                                 f_unit.ids.txtfield.text = '' 
@@ -317,6 +385,8 @@
                     
         MyFloatingButton:
             data:app.data
+            right_pad : True
+            
 
 
 
@@ -401,3 +471,4 @@
     #hint_animation: True
     right_pad:False
     callback: app.callback
+        

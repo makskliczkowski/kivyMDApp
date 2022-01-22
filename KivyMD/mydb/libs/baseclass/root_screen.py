@@ -18,7 +18,9 @@ from kivymd.uix.button import MDFloatingActionButtonSpeedDial, MDFlatButton, MDF
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
-
+from kivymd.uix.datatables import MDDataTable
+from kivy.metrics import dp
+from kivymd.effects.roulettescroll import RouletteScrollEffect
 
 def dictToStringSep(dic):
     string = ""
@@ -80,6 +82,54 @@ class MyTab(MDBoxLayout):
                 #print(col)
                 self.table.add_widget(col)
 
+class MyTab2(MDBoxLayout):
+    
+    def __init__(self, **kwargs):
+        super(MyTab2,self).__init__(**kwargs)
+        self.columnLabels = []
+        self.colNum = 1
+        self.rowNum = 1
+        self.table = None
+        # for storing labels
+        self.rowy = []
+        self.coly = []
+        
+    def set_params(self, cols, fetched):
+        #self.clear_widgets()
+        self.columnLabels = []
+        self.colNum = len(cols)
+        self.rowNum = len(fetched) + 1
+        print(f"cols:{self.colNum}, rows:{self.rowNum}")
+        # set table columns
+        tableCols = [(col, dp(30)) for col in cols]
+        print(f"\nOur columns are :\n->{tableCols}")
+        # set rows
+        self.set_values(fetched)
+        print(f"I have set the values\n\t->{self.rowy}")
+        # set table
+        table = MDDataTable(
+            size_hint=(1, 1),
+            column_data = tableCols,
+            row_data = self.rowy,
+            use_pagination=True,
+            pos_hint =  {"center_x": .5, "center_y": .5}
+        #    effect_cls = RouletteScrollEffect
+            #background_color=gch("#F2CB05"),
+        )
+        self.add_widget(table)
+        
+    def set_values(self, db):
+        self.rowy = []
+        for row in db:
+            tmp = tuple([str(i) for i in row])
+            #print("->\t", tmp, "\n\n\n")
+            
+            #self.coly= []
+            #for col in row:
+                #print(col)
+            #    self.coly.append(MyLabel(text = str(col)))
+            #self.rowy.append(self.coly)
+            self.rowy.append(tmp)      
 
 class MyLabel(MDLabel):
     pass
@@ -106,8 +156,8 @@ class MySeeAllButton(MDIconButton):
     pass
 
 class MyFloatingButton(MDFloatingActionButtonSpeedDial,RectangularRippleBehavior):
-
-    pass
+    def closeMe(self):
+        self.state = 'close'
 
 class MyCheckBox(MDGridLayout):
     text = StringProperty()

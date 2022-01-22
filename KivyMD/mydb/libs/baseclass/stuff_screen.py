@@ -6,14 +6,10 @@ import mysql.connector
 from kivy.utils import get_color_from_hex as gch
 from kivy.app import App
 from libs.baseclass.root_screen import dictToStringSep, dictToList, MyCheckBox
-from kivymd.uix.datatables import MDDataTable
-from kivymd.uix.gridlayout import GridLayout
-from libs.baseclass.root_screen import MyTab
+from libs.baseclass.root_screen import MyTab, MyTab2
 from kivy.clock import Clock
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.screen import MDScreen
-import random
-from functools import partial
 
 """ CLICKERS """
 def clickCheckBox(choice, active, cols, name):
@@ -26,35 +22,35 @@ def clickCheckBox(choice, active, cols, name):
     
 """ PRINTING QUERY """
 def printQuery(cols, searches, selected, type, database):
-        elements = dictToStringSep(cols)
-        print(f"Checking: {elements}\n in {type}")
-        curs = database.cursor()
-        # check items searches
-        #searches = [self.ids.fstSearch,self.ids.sndSearch, self.ids.thrdSearch, self.ids.fourthSearch ]
-        items = {}
-        nonEmpty = 0
-        for item in searches:
-            text = item.ids.txtfield.text
-            name = item.name
-            selected[name] = text
-            if text != "":
-                nonEmpty += 1
-                items[name] = text
-        
-        query = (f"SELECT {elements} FROM {type}")
-        # execute additional statements
-        if nonEmpty > 0:
-            query += " WHERE "
-            for name in items.keys():
-                query += f"{name} LIKE %({name})s"
-                nonEmpty-=1
-                if nonEmpty != 0:
-                    query += " AND "
-            print(items)
-            database.query(query, items)
-        else:
-            database.querySingle(query)
-        print(f"\n\nquery = {query} \n\n")
+    elements = dictToStringSep(cols)
+    print(f"Checking: {elements}\n in {type}")
+    #curs = database.mydb.cursor()
+    # check items searches
+    #searches = [self.ids.fstSearch,self.ids.sndSearch, self.ids.thrdSearch, self.ids.fourthSearch ]
+    items = {}
+    nonEmpty = 0
+    for item in searches:
+        text = item.ids.txtfield.text
+        name = item.name
+        selected[name] = text
+        if text != "":
+            nonEmpty += 1
+            items[name] = text
+    
+    query = (f"SELECT {elements} FROM {type}")
+    # execute additional statements
+    if nonEmpty > 0:
+        query += " WHERE "
+        for name in items.keys():
+            query += f"{name} LIKE %({name})s"
+            nonEmpty-=1
+            if nonEmpty != 0:
+                query += " AND "
+        print(items)
+        database.query(query, items)
+    else:
+        database.querySingle(query)
+    print(f"\n\nquery = {query} \n\n")
 
     
     
@@ -64,8 +60,8 @@ class StuffScreen(ThemableBehavior, MDScreen ):
         super(StuffScreen, self).__init__(**kwargs)
         self.app = App.get_running_app()
         
-        self.cols = {'_id':1, 'name':1, 'unit':1, 'quantity':1, 'needed':1}
-        self.selected = {'_id':"", 'name':"", 'unit':"", 'quantity':"", 'needed':""}
+        self.cols = {'id':1, 'name':1, 'unit':1, 'owned':1, 'needed':1}
+        self.selected = {'id':"", 'name':"", 'unit':"", 'owned':"", 'needed':""}
         self.shownCols = dictToList(self.cols)
         self.mytab = None
         self.fetched = None
@@ -83,9 +79,9 @@ class StuffScreen(ThemableBehavior, MDScreen ):
         self.fetched = curs.fetchall()
         if(self.mytab is not None): 
             self.ids.lst.remove_widget(self.mytab)
-        self.mytab = MyTab(orientation = 'vertical', md_bg_color = gch("#0E1259"), height = "70dp", adaptive_height = False)
+            
+        self.mytab = MyTab2(orientation = 'vertical', md_bg_color = gch("#FFFFFF"))
         #print(self.fetched)
-        print("ids:",self.ids, "\n\n\n")
         self.mytab.set_params(dictToList(self.cols), self.fetched)
         self.ids.lst.add_widget(self.mytab)
         
@@ -94,11 +90,12 @@ class HealthScreen(ThemableBehavior, MDScreen):
         super(HealthScreen, self).__init__(**kwargs)
         self.app = App.get_running_app()
         
-        self.cols = {'_id':1, 'type':1, 'purpose':1}
-        self.selected = {'_id':"", 'type':"", 'purpose':""}
+        self.cols = {'id':1, 'name':1, 'type':1}
+        self.selected = {'id':"", 'name':"", 'type':""}
         self.shownCols = dictToList(self.cols)
         self.mytab = None
         self.fetched = None
+    
         
     def clickCheckBox(self, choice, active):
         clickCheckBox(choice, active, self.cols, "health")
@@ -113,9 +110,9 @@ class HealthScreen(ThemableBehavior, MDScreen):
         self.fetched = curs.fetchall()
         if(self.mytab is not None): 
             self.ids.lst.remove_widget(self.mytab)
-        self.mytab = MyTab(orientation = 'vertical', md_bg_color = gch("#0E1259"), height = "70dp", adaptive_height = False)
+            
+        self.mytab = MyTab2(orientation = 'vertical', md_bg_color = gch("#FFFFFF"))
         #print(self.fetched)
-        print("ids:",self.ids, "\n\n\n")
         self.mytab.set_params(dictToList(self.cols), self.fetched)
         self.ids.lst.add_widget(self.mytab)      
         
@@ -124,8 +121,8 @@ class TransportScreen(ThemableBehavior, MDScreen):
         super(TransportScreen, self).__init__(**kwargs)
         self.app = App.get_running_app()
         self.type = "transport"
-        self.cols = {'_id':1, 'name':1, 'type':1}
-        self.selected = {'_id':"", 'name':"", 'type':""}
+        self.cols = {'id':1, 'type':1, 'place':1}
+        self.selected = {'id':"", 'type':"", 'place':""}
         self.shownCols = dictToList(self.cols)
         self.mytab = None
         self.fetched = None
@@ -143,11 +140,11 @@ class TransportScreen(ThemableBehavior, MDScreen):
         self.fetched = curs.fetchall()
         if(self.mytab is not None): 
             self.ids.lst.remove_widget(self.mytab)
-        self.mytab = MyTab(orientation = 'vertical', md_bg_color = gch("#0E1259"), height = "70dp", adaptive_height = False)
+            
+        self.mytab = MyTab2(orientation = 'vertical', md_bg_color = gch("#FFFFFF"))
         #print(self.fetched)
-        print("ids:",self.ids, "\n\n\n")
         self.mytab.set_params(dictToList(self.cols), self.fetched)
-        self.ids.lst.add_widget(self.mytab)     
+        self.ids.lst.add_widget(self.mytab)
 
 class StuffCheckBox(MyCheckBox):
     pass
@@ -192,20 +189,10 @@ class FoodScreen(ThemableBehavior, MDScreen):
         curs = self.app.myDatabase.cur
         self.fetched = curs.fetchall()
         if(self.mytab is not None): 
-            self.ids.scrollbox.remove_widget(self.mytab)
+            self.ids.lst.remove_widget(self.mytab)
             
-        vp_height = self.ids.scroll.viewport_size[1]
-        my_height = self.ids.scroll.height
-        height = 70
-        
-        self.mytab = MyTab(orientation = 'vertical', md_bg_color = gch("#0E1259"))
+        self.mytab = MyTab2(orientation = 'vertical', md_bg_color = gch("#FFFFFF"))
         #print(self.fetched)
-        print("ids:",self.ids, "\n\n\n")
         self.mytab.set_params(dictToList(self.cols), self.fetched)
-        self.ids.scrollbox.add_widget(self.mytab)
-        if vp_height > my_height:
-            scroll = self.root.ids.scroll.scroll_y
-            bottom = scroll * (vp_height - my_height)
-            #partial(self.adjust_scroll, bottom+self.mytab.height)
-            Clock.schedule_once(partial(self.adjust_scroll, bottom+self.mytab.height), 1)
+        self.ids.lst.add_widget(self.mytab)
     

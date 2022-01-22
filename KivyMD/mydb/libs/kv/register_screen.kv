@@ -47,7 +47,8 @@
                     type: "large"
                     font_size: 20
                     pos_hint:{"center_x":0.5}
-                    on_press: root.logger()
+                    on_press: 
+                        root.logger()
 
             MDBoxLayout:
                 adaptive_height: True
@@ -62,7 +63,7 @@
                     on_release: 
                         root.rootLogin()
                         root.parent.current = "rootScreen"
-
+                        #root.parent.ids.root_scr.ids.overview.setMoneyOnStart()
                 MDTextButton:
                     text: "Or Login with Touch ID"
                     pos_hint: {"center_x": .5}

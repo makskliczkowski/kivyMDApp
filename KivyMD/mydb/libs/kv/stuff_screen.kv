@@ -7,102 +7,99 @@
 #: import grc kivy.utils.get_random_color
 <StuffScreen>
     id : stuff
-    ScrollView:
+    MDBoxLayout:
+        #cols : 1
+        id: lst
+        orientation : 'vertical'
+        rows : 4
+        #size_hint : (1,1)
+        #row_force_default : True
+        #adaptive_height: True
+        MDGridLayout:
+            cols : 4
+            id : elements
+            row_force_default : True
+            row_default_height : dp(60)
+            height : dp(80)
+            size_hint : (1, None)
+            adaptive_height: False
+            
+            StuffCheckBox:
+                id : fst
+                text : list(root.cols.keys())[1]
+            StuffCheckBox:
+                id : snd
+                text : list(root.cols.keys())[2]
+            StuffCheckBox:
+                id : third
+                text : list(root.cols.keys())[3]
+            StuffCheckBox :
+                id : fourth
+                text : list(root.cols.keys())[4]
 
-        adaptive_height: False
-        MDBoxLayout:
-            #cols : 1
-            id: lst
-            orientation : 'vertical'
-            rows : 4
-            #size_hint : (1,1)
-            #row_force_default : True
-            #adaptive_height: True
-            MDGridLayout:
-                cols : 4
-                id : elements
-                row_force_default : True
-                row_default_height : dp(60)
-                height : dp(60)
-                size_hint : (1, None)
-                adaptive_height: False
-                
-                FoodCheckBox:
-                    id : fst
-                    text : list(root.cols.keys())[1]
-                FoodCheckBox:
-                    id : snd
-                    text : list(root.cols.keys())[2]
-                FoodCheckBox:
-                    id : third
-                    text : list(root.cols.keys())[3]
-                FoodCheckBox :
-                    id : fourth
-                    text : list(root.cols.keys())[4]
+        MDGridLayout:
+            cols : 4
+            rows : 1
+            row_force_default : True
+            row_default_height : dp(60)
+            height : dp(80)
+            size_hint : (1, None)
+            adaptive_height: False
+            id : search
 
-            MDGridLayout:
-                cols : 4
-                rows : 1
-                row_force_default : True
-                row_default_height : dp(60)
-                height : dp(60)
-                size_hint : (1, None)
-                adaptive_height: False
-                id : search
+            MySearchBox : 
+                id : fstSearch
+                name : list(root.cols.keys())[1]
 
-                MySearchBox : 
-                    id : fstSearch
-                    name : list(root.cols.keys())[1]
+            MySearchBox : 
+                id : sndSearch
+                name : list(root.cols.keys())[2]
 
-                MySearchBox : 
-                    id : sndSearch
-                    name : list(root.cols.keys())[2]
+            MySearchBox : 
+                id : thrdSearch
+                name : list(root.cols.keys())[3]
 
-                MySearchBox : 
-                    id : thrdSearch
-                    name : list(root.cols.keys())[3]
-
-                MySearchBox : 
-                    id : fourthSearch
-                    name : list(root.cols.keys())[4]
+            MySearchBox : 
+                id : fourthSearch
+                name : list(root.cols.keys())[4]
 
 
 
-            MDGridLayout:
-                cols : 1
-                width : self.parent.width
-                row_force_default : True
-                row_default_height : dp(120)
-                height : dp(120)
-                size_hint: None, None
+        MDGridLayout:
+            cols : 1
+            width : self.parent.width
+            row_force_default : True
+            row_default_height : dp(120)
+            height : dp(140)
+            size_hint: None, None
 
-                MDBoxLayout:
-                    cols : 2
-                    spacing: dp(10)
-                    size_hint : (1, 0.05)
-                    pos_hint : {'center_x': 0.5}
-                    width : root.width
-                    orientation : 'vertical'
-                    MySeeAllButton :
-                        anchor_x: 'center'
-                        anchor_y: 'center'
-                        pos_hint: {'center_x':0.5}
-                        id : queryme
-                        icon : 'eye'
-                        on_release : stuff.printQuery()
-                    MySeeAllButton :
-                        anchor_x: 'center'
-                        anchor_y: 'center'
-                        pos_hint: {'center_x':0.5}
-                        id : modify
-                        #on_release : transport.printQuery()
+            MDBoxLayout:
+                cols : 2
+                spacing: dp(10)
+                size_hint : (1, 0.05)
+                pos_hint : {'center_x': 0.5}
+                width : root.width
+                orientation : 'vertical'
+                MySeeAllButton :
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    pos_hint: {'center_x':0.5}
+                    id : queryme
+                    icon : 'eye'
+                    on_release : stuff.printQuery()
+                MySeeAllButton :
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    pos_hint: {'center_x':0.5}
+                    id : modify
+                    #on_release : transport.printQuery()
 
 
-            #anchor_x: 'center'
-            #anchor_y: 'center'
+        #anchor_x: 'center'
+        #anchor_y: 'center'
 
 <StuffCheckBox>
-    id : transbox
+    id : stuffbox
     #orientation : 'vertical'
     adaptive_height: False
     MDLabel:
@@ -116,4 +113,4 @@
         id : switch
         active : True
         on_press : 
-            foodbox.parent.parent.parent.parent.clickCheckBox(root.text, self.active)
+            stuffbox.parent.parent.parent.clickCheckBox(root.text, self.active)

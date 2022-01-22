@@ -10,7 +10,7 @@ from libs.baseclass.root_screen import MyScreenManager
 # for databases
 import mysql.connector
 from mysql.connector import errorcode
-
+from kivy.app import App
 
 
 # give new atribute
@@ -145,9 +145,28 @@ class MDRally(MDApp):
         self.categories = None                                                  # spending categories
         self.title = "Spendings application"
         self.icon = f"{os.environ['MYDB_ROOT']}/assets/images/logo.png"
+        self.app = App.get_running_app()
+        self.builder = None
 
     def callback(self, instance):
-        print(instance.icon)
+        self.app = App.get_running_app()
+        #print(self.builder.ids)
+        self.builder.ids.root_scr.ids.scr_manager.transition.direction = "left"
+        #print(instance.state)
+        #instance.parent.state = 'close'
+        if instance.icon == "pizza":
+            self.builder.ids.root_scr.ids.food_ico.on_release()
+            self.builder.ids.root_scr.ids.scr_manager.current = "FOOD"   
+        elif instance.icon == "tie":
+            self.builder.ids.root_scr.ids.stuff_ico.on_release()
+            self.builder.ids.root_scr.ids.scr_manager.current = "STUFF"
+        elif instance.icon == "hospital":
+            self.builder.ids.root_scr.ids.health_ico.on_release()
+            self.builder.ids.root_scr.ids.scr_manager.current = "HEALTH"
+        else:
+            self.builder.ids.root_scr.ids.transport_ico.on_release()
+            self.builder.ids.root_scr.ids.scr_manager.current = "TRANSPORT"
+        instance.parent.close_stack()
         
     def insertDataFood(self, name , owned , unit , needed , price, place, address):
         curs, id_place, id_log = insertData(place, address, self.myDatabase)
@@ -187,7 +206,44 @@ class MDRally(MDApp):
             return full_price
         except:
             print("something wrong in here, try again please\n\n")
+    def insertDataStuff(self, name , owned , unit , needed , price, place, address):
+        curs, id_place, id_log = insertData(place, address, self.myDatabase)
+        try:
+            # iterate through the name elements
+            items = name.split("\n")
+            #print("\n\n",items)
+            units = unit.split("\n")
+            owneds = owned.split("\n")
+            neededs = needed.split("\n")
+            prices = price.split("\n")
+            # take the smallest length or assume rest has default
+            length = len(items)#min(len(items), len(units), len(owneds), len(neededs), len(prices))
+            full_price = 0
+            for i in range(length):
+                
+                # insert item
+                curs.execute("""INSERT INTO stuff (name, unit, owned, needed) VALUES (%s , %s, %s, %s)"""
+                                          , (items[i], units[i], owneds[i], neededs[i]))
+                print("inserted into stuff")
+                # take id
+                curs.execute("""SELECT DISTINCT id FROM stuff WHERE name = %s AND unit = %s""", (items[i], units[i]))
+                self.fetched = curs.fetchall()
+                id_item = int(self.fetched[0][0])
+                print(f"\n\nselected the stuff id {id_item}")
+                # add to shopping log
+                curs.execute("""INSERT INTO shopping (purchase_id, groceries_id, price) VALUES (%s , %s, %s)"""
+                                          ,(id_log , id_item, prices[i]))
+                print("inserted into shopping")
+                full_price += float(prices[i])
             
+            
+            self.myDatabase.commit()
+            curs.close()
+            
+            print(f"\n\n\n full_price : {full_price}") 
+            return full_price
+        except:
+            print("something wrong in here, try again please\n\n")            
     def insertDataTransport(self, type, destination, price, place, address):
         curs, id_place, id_log = insertData(place, address, self.myDatabase)
         try:
@@ -202,12 +258,46 @@ class MDRally(MDApp):
                 # insert item
                 curs.execute("""INSERT INTO transport (type, place) VALUES (%s , %s)"""
                                           , (types[i], destinations[i]))
-                print("inserted into food")
+                print("inserted into transport")
                 # take id
                 curs.execute("""SELECT DISTINCT id FROM transport WHERE type = %s AND place = %s""", (types[i], destinations[i]))
                 self.fetched = curs.fetchall()
                 id_item = int(self.fetched[0][0])
-                print(f"\n\nselected the food id {id_item}")
+                print(f"\n\nselected the transport id {id_item}")
+                # add to shopping log
+                curs.execute("""INSERT INTO shopping (purchase_id, transport_id, price) VALUES (%s , %s, %s)"""
+                                          ,(id_log , id_item, prices[i]))
+                print("inserted into transport")
+                full_price += float(prices[i])
+            
+            
+            self.myDatabase.commit()
+            curs.close()
+            
+            print(f"\n\n\n full_price : {full_price}") 
+            return full_price
+        except:
+            print("something wrong in here, try again please\n\n")                  
+    def insertDataHealth(self, name, type, price, place, address):
+        curs, id_place, id_log = insertData(place, address, self.myDatabase)
+        try:
+            # iterate through the name elements
+            types = type.split("\n")
+            #print("\n\n",items)
+            names = name.split("\n")
+            prices = price.split("\n")
+            length = len(types)#min(len(items), len(units), len(owneds), len(neededs), len(prices))
+            full_price = 0
+            for i in range(length):
+                # insert item
+                curs.execute("""INSERT INTO health (name, type) VALUES (%s , %s)"""
+                                          , (names[i], types[i]))
+                print("inserted into health")
+                # take id
+                curs.execute("""SELECT DISTINCT id FROM health WHERE name = %s AND type = %s""", (names[i], types[i]))
+                self.fetched = curs.fetchall()
+                id_item = int(self.fetched[0][0])
+                print(f"\n\nselected the health id {id_item}")
                 # add to shopping log
                 curs.execute("""INSERT INTO shopping (purchase_id, transport_id, price) VALUES (%s , %s, %s)"""
                                           ,(id_log , id_item, prices[i]))
@@ -222,8 +312,6 @@ class MDRally(MDApp):
             return full_price
         except:
             print("something wrong in here, try again please\n\n")
-                  
-
 
 
     def build(self):         
@@ -270,8 +358,9 @@ class MDRally(MDApp):
                 "Money": [FONT_PATH + "Lato-Bold", 48, False, 0],
             }
         )
-
-        return Builder.load_string(KV)
+        self.builder = Builder.load_string(KV)
+        
+        return self.builder
 
         
         

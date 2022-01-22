@@ -3,40 +3,29 @@
 
 
 <MyBudgetsScreen>
-
-    ScrollView:
-
-        MDList:
-            spacing: dp(20)
-
-            PieChartLine:
-                text: "Left\n$ 275.36"
-                angle_start: [90, 105, 180, 345]
-                angle_end: [100, 175, 340, 445]
-                line_color: [gch("#BA68C8"), gch("#64B5F6"), gch("#000000"), gch("#BBDEFB")]
-
-            MDList:
-
-                MyListItem:
-                    text: "Coffee shops"
-                    secondary_text: "$ 45.69 / $ 70.00"
-                    tertiary_text: "$ 24.51"
-                    bar_color: gch("#BBDEFB")
-
-                MyListItem:
-                    text: "Groceries"
-                    secondary_text: "$ 16.45 / $ 170.00"
-                    tertiary_text: "$ 153.55"
-                    bar_color: gch("#BA68C8")
-
-                MyListItem:
-                    text: "Restaurants"
-                    secondary_text: "$ 45.69 / $ 70.00"
-                    tertiary_text: "$ 46.75"
-                    bar_color: gch("#64B5F6")
-
-                MyListItem:
-                    text: "Clothing"
-                    secondary_text: "$ 19.45 / $ 70.00"
-                    tertiary_text: "$ 50.55"
-                    bar_color: gch("#FF6859")
+    id:budget_screen
+    MDBoxLayout:
+        id: lst
+        orientation : 'vertical'
+        MDGridLayout:
+            cols : 1
+            width : self.parent.width
+            row_force_default : True
+            row_default_height : dp(120)
+            height : dp(140)
+            size_hint: None, None
+            MDBoxLayout:
+                cols : 2
+                spacing: dp(10)
+                size_hint : (1, 0.05)
+                pos_hint : {'center_x': 0.5}
+                width : root.width
+                orientation : 'vertical'
+                MySeeAllButton :
+                    id : queryme
+                    icon : 'eye'
+                    size: self.parent.size  # important!
+                    pos: self.parent.pos  # important
+                    minimum_width : self.parent.width/2
+                    width : self.parent.width/2
+                    on_release : budget_screen.printQuery()      

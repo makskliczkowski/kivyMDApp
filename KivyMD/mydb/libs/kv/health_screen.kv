@@ -7,86 +7,83 @@
 
 <HealthScreen>
     id: health
-    ScrollView:
-        id : scroll
-        adaptive_height: False
-        MDBoxLayout:
-            #cols : 1
-            id: lst
-            orientation : 'vertical'
-            rows : 4
-            #size_hint : (1,1)
-            #row_force_default : True
-            #adaptive_height: True
-            MDGridLayout:
-                cols : 4
-                id : elements
-                row_force_default : True
-                row_default_height : dp(60)
-                height : dp(60)
-                size_hint : (1, None)
-                adaptive_height: False
-                TransportCheckBox:
-                    id : fst
-                    text : list(root.cols.keys())[1]
-                TransportCheckBox:
-                    id : snd
-                    text : list(root.cols.keys())[2]
-            MDGridLayout:
-                cols : 4
-                rows : 1
-                row_force_default : True
-                row_default_height : dp(60)
-                height : dp(60)
-                size_hint : (1, None)
-                adaptive_height: False
-                id : search
+    MDBoxLayout:
+        #cols : 1
+        id: lst
+        orientation : 'vertical'
+        rows : 4
+        #size_hint : (1,1)
+        #row_force_default : True
+        #adaptive_height: True
+        MDGridLayout:
+            cols : 4
+            id : elements
+            row_force_default : True
+            row_default_height : dp(60)
+            height : dp(60)
+            size_hint : (1, None)
+            adaptive_height: False
+            TransportCheckBox:
+                id : fst
+                text : list(root.cols.keys())[1]
+            TransportCheckBox:
+                id : snd
+                text : list(root.cols.keys())[2]
+        MDGridLayout:
+            cols : 2
+            rows : 1
+            row_force_default : True
+            row_default_height : dp(60)
+            height : dp(80)
+            size_hint : (1, None)
+            adaptive_height: False
+            id : search
 
-                MySearchBox : 
-                    id : fstSearch
-                    name : list(root.cols.keys())[1]
+            MySearchBox : 
+                id : fstSearch
+                name : list(root.cols.keys())[1]
 
-                MySearchBox : 
-                    id : sndSearch
-                    name : list(root.cols.keys())[2]
+            MySearchBox : 
+                id : sndSearch
+                name : list(root.cols.keys())[2]
 
 
 
-            MDGridLayout:
-                cols : 1
-                width : self.parent.width
-                row_force_default : True
-                row_default_height : dp(120)
-                height : dp(120)
-                size_hint: None, None
+        MDGridLayout:
+            cols : 1
+            width : self.parent.width
+            row_force_default : True
+            row_default_height : dp(120)
+            height : dp(140)
+            size_hint: None, None
 
-                MDBoxLayout:
-                    cols : 2
-                    spacing: dp(10)
-                    size_hint : (1, 0.05)
-                    pos_hint : {'center_x': 0.5}
-                    width : root.width
-                    orientation : 'vertical'
-                    MySeeAllButton :
-                        anchor_x: 'center'
-                        anchor_y: 'center'
-                        pos_hint: {'center_x':0.5}
-                        id : queryme
-                        icon : 'eye'
-                        on_release : health.printQuery()
-                    MySeeAllButton :
-                        anchor_x: 'center'
-                        anchor_y: 'center'
-                        pos_hint: {'center_x':0.5}
-                        id : modify
-                        #on_release : transport.printQuery()
+            MDBoxLayout:
+                cols : 2
+                spacing: dp(10)
+                size_hint : (1, 0.05)
+                pos_hint : {'center_x': 0.5}
+                width : root.width
+                orientation : 'vertical'
+                MySeeAllButton :
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    pos_hint: {'center_x':0.5}
+                    id : queryme
+                    icon : 'eye'
+                    on_release : health.printQuery()
+                MySeeAllButton :
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    pos_hint: {'center_x':0.5}
+                    id : modify
+                    #on_release : transport.printQuery()
 
 
-            #anchor_x: 'center'
-            #anchor_y: 'center'
+        #anchor_x: 'center'
+        #anchor_y: 'center'
 
 <HealthCheckBox>
-    id : transbox
+    id : healthbox
     #orientation : 'vertical'
     adaptive_height: False
     MDLabel:
@@ -100,4 +97,4 @@
         id : switch
         active : True
         on_press : 
-            foodbox.parent.parent.parent.parent.clickCheckBox(root.text, self.active)
+            health.parent.parent.parent.clickCheckBox(root.text, self.active)
