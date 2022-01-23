@@ -34,15 +34,25 @@
                     MDBoxLayout:
                         canvas.before:
                             Color:
-                                rgba: gch("#FFFFFF")
+                                rgba: gch("#2E83F2")
                             Rectangle:
                                 size: self.size
                                 pos: self.pos
                         adaptive_height: True
-                        orientation: 'horizontal'
-                        MySearchBox :
+                        orientation: 'vertical'
+                        MDTextField :
                             id : dest
-                            name : 'destination'
+                            name : 'Directory path'
+                            hint_text : "Directory path"
+                            multiline : False
+                        MDTextField :
+                            id : pw
+                            icon_right : "eye-off"
+                            hint_text: "Password"
+                            name : 'Password'
+                            color_active:app.theme_cls.primary_dark
+                            password: True
+                            password_mask: "•"
                             multiline : False
                     MDBoxLayout:
                         padding: dp(20)
@@ -60,7 +70,8 @@
                             icon : 'cloud-upload'
                             font_size: dp(84) 
                             on_release:
-                                self.dumpDB(dest.text)
+                                overview.dumpDB(dest.text, pw.text)
+                                pw.text = ''
                         MyLabel:
                             halign: "center"
                             font_style: "Button"
@@ -70,8 +81,8 @@
                             icon : 'cloud-download'
                             font_size: dp(84) 
                             on_release:
-                                self.loadDB(dest.text)
-                            
+                                overview.loadDB(dest.text, pw.text)
+                                pw.text = ''
                         MyLabel:
                             halign: "center"
                             font_style: "Button"
@@ -98,7 +109,7 @@
                             name : 'type'
                             multiline : True
                         MySearchBoxUgly :
-                            id : plc
+                            id : t_plc
                             name : 'place'
                             multiline : True
                         MySearchBoxUgly :
@@ -139,7 +150,7 @@
                                 #root.app.insertDataTransport(typ.ids.txtfield.text, plc.ids.txtfield.text, pric.ids.txtfield.text, plc.ids.txtfield.text, plc_adrr.ids.txtfield.text)
                                 root.updateMoneyTransport()
                                 typ.ids.txtfield.text = ''
-                                plc.ids.txtfield.text = ''
+                                t_plc.ids.txtfield.text = ''
                                 pric.ids.txtfield.text = '' 
                                 plc.ids.txtfield.text = ''
                                 plc_adrr.ids.txtfield.text = ''

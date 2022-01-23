@@ -30,7 +30,8 @@ class MyRegisterScreen(MDScreen):
         super(MyRegisterScreen, self).__init__(**kwargs)
         # get current running app
         self.app = App.get_running_app()
-    
+        self.categories = None
+        
     def use_database(self):
         # our database
         if not self.app.myDatabase.checkConnection():

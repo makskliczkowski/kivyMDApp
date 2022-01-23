@@ -57,6 +57,10 @@ class MyDatabase(object):
         self.mydb = None
         self.cur = None
         self.fetcher = None
+        self.permissions = None
+        self.canInsert = False
+        self.canDump = False
+        self.canSelect = False
         
     def checkConnection(self):
         return (self.mydb is None)
@@ -72,7 +76,9 @@ class MyDatabase(object):
     """ WORKING CONNECTION """
     def connect(self, login, password, host = "localhost", database = "shopper"):
         print(f"\n\n\nConnecting to {login}@{host} with database : {database}\n\n\n")
-    
+        self.host = host
+        self.login = login
+        self.database = database
         self.mydb = mysql.connector.connect(
                 host = host,
                 user = login,
@@ -80,6 +86,21 @@ class MyDatabase(object):
                 database = database
             )
         self.cur = self.mydb.cursor()
+        print("created cursor")
+        self.cur.execute("SHOW GRANTS")
+        self.permissions = self.cur.fetchall()[0]
+        for item in self.permissions:
+            print(f"\n\n\n {item}")
+            if "ALL" in item:
+                self.canInsert = True
+                self.canDump = True
+                self.canSelect = True
+            if "INSERT" in item:
+                self.canInsert = True
+            if "SELECT" in item:
+                self.canSelect = True
+        
+        
     
     """ WORKING QUERY SINGLE """
     def querySingle(self, query):
@@ -99,12 +120,14 @@ class MyDatabase(object):
         self.mydb.close()
     
 
-
+""" Data insertion template """
 def insertData(place, address, db):
     curs = db.mydb.cursor()
     try:
         # add into places
-        curs.execute("""INSERT INTO places (name, address) VALUES (%s , %s )""", (place, address))
+        curs.execute("""INSERT INTO places (name, address) VALUES (%s , %s ) 
+                        ON DUPLICATE KEY UPDATE address = Values(address)                   
+                     """, (place, address))
         print("\n\ninserted the places")
         # find index of the place
         curs.execute("""SELECT id FROM places WHERE name = %s AND address = %s""", (place,address))
@@ -118,10 +141,10 @@ def insertData(place, address, db):
         fetched = curs.fetchall()
         id_log = int(fetched[0][0])
         print(f"\n\nselected the log id {id_log}")
-        return curs, id_place, id_log
     except:
         print("couldn't update logs")
-        
+    else:
+        return curs, id_place, id_log    
 
 class MDRally(MDApp):
     data = {
@@ -142,7 +165,6 @@ class MDRally(MDApp):
         # database stuff
         self.myDatabase = MyDatabase()
         # categories
-        self.categories = None                                                  # spending categories
         self.title = "Spendings application"
         self.icon = f"{os.environ['MYDB_ROOT']}/assets/images/logo.png"
         self.app = App.get_running_app()
@@ -150,10 +172,8 @@ class MDRally(MDApp):
 
     def callback(self, instance):
         self.app = App.get_running_app()
-        #print(self.builder.ids)
         self.builder.ids.root_scr.ids.scr_manager.transition.direction = "left"
-        #print(instance.state)
-        #instance.parent.state = 'close'
+
         if instance.icon == "pizza":
             self.builder.ids.root_scr.ids.food_ico.on_release()
             self.builder.ids.root_scr.ids.scr_manager.current = "FOOD"   
@@ -169,24 +189,41 @@ class MDRally(MDApp):
         instance.parent.close_stack()
         
     def insertDataFood(self, name , owned , unit , needed , price, place, address):
+        # insert place and log
         curs, id_place, id_log = insertData(place, address, self.myDatabase)
         try:
             # iterate through the name elements
             items = name.split("\n")
-            #print("\n\n",items)
             units = unit.split("\n")
             owneds = owned.split("\n")
             neededs = needed.split("\n")
             prices = price.split("\n")
-            # take the smallest length or assume rest has default
-            length = len(items)#min(len(items), len(units), len(owneds), len(neededs), len(prices))
+            # take the nondefault length
+            length = len(items)
             full_price = 0
             for i in range(length):
                 
-                # insert item
-                curs.execute("""INSERT INTO groceries (name, unit, owned, needed) VALUES (%s , %s, %s, %s)"""
-                                          , (items[i], units[i], owneds[i], neededs[i]))
-                print("inserted into food")
+                # check if item exists
+                curs.execute("""SELECT COUNT(1)
+                                FROM groceries
+                                WHERE name = %s AND unit = %s    
+                             """, (items[i], units[i]))
+                self.fetched = curs.fetchall()
+                exists = self.fetched[0][0] == 1
+                if exists:
+                    curs.execute("""
+                                 UPDATE groceries SET owned = %s, needed = %s WHERE name = %s AND unit = %s
+                                 """, (owneds[i], neededs[i], items[i], units[i])
+                    )
+                    print(f"\t\t->UPDATED FOOD ON {items[i]} and {units[i]}")
+                else: 
+                    # insert item
+                    curs.execute("""INSERT INTO groceries (name, unit, owned, needed) VALUES (%s , %s, %s, %s)
+                                    ON DUPLICATE KEY UPDATE owned = VALUES(owned), needed = VALUES(needed)
+                                """
+                                            , (items[i], units[i], owneds[i], neededs[i]))
+                    print(f"\t\t->inserted into food {items[i]} and {units[i]}")
+                
                 # take id
                 curs.execute("""SELECT DISTINCT id FROM groceries WHERE name = %s AND unit = %s""", (items[i], units[i]))
                 self.fetched = curs.fetchall()
